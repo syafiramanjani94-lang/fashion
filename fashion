@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FashionVibe - Fashion genz</title>
+    <style>
+        /* CSS Variables untuk Tema Warna */
+        :root {
+            --primary: #2c3e50;
+            --accent: #d4af37; /* Warna emas/beige */
+            --bg-color: #fcfcfc;
+            --text-main: #333333;
+            --text-light: #777777;
+            --white: #ffffff;
+            --border: #eeeeee;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Container & Layout */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Navigation Bar */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links li {
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links li:hover, .nav-links li.active-nav {
+            color: var(--accent);
+        }
+
+        /* Cart Badge */
+        #cart-count {
+            background-color: var(--accent);
+            color: var(--white);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        /* Page View Controller */
+        .page {
+            display: none;
+            padding: 40px 0;
+            min-height: 80vh;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        /* --- HALAMAN HOME --- */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80') center/cover;
+            color: var(--white);
+            text-align: center;
+            padding: 100px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* --- HALAMAN PRODUK --- */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+            color: var(--primary);
+        }
+
+        .grid-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        /* --- HALAMAN DETAIL PRODUK --- */
+        .detail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .detail-img {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .detail-img img {
+            width: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .detail-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .detail-info h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .detail-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .detail-desc {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .detail-stock {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .qty-input {
+            width: 60px;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+        }
+
+        /* --- HALAMAN KERANJANG --- */
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .cart-table th, .cart-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-table th {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .cart-total-container {
+            text-align: right;
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--white);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .btn-remove {
+            background-color: #ff4d4d;
+            padding: 5px 10px;
+        }
+        .btn-remove:hover {
+            background-color: #cc0000;
+        }
+
+        /* --- FORM --- */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .checkout-form, .checkout-summary {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* --- HALAMAN TENTANG & KONTAK --- */
+        .about-text {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            text-align: center;
+        }
+
+        .team-member {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .team-member img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid var(--accent);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 8px;
+        }
+
+        .contact-info p {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .checkout-grid, .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .cart-table {
+                font-size: 14px;
+            }
+            .cart-item-img {
+                display: none;
+            }
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.3s forwards, fadeOut 0.3s 2.7s forwards;
+            font-weight: 500;
+        }
+        .toast.error { background-color: #e74c3c; }
+        .toast.success { background-color: #2ecc71; }
+        
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="container navbar">
+            <div class="logo" onclick="navigate('home')">Fashion<span>Vibe</span></div>
+            <ul class="nav-links">
+                <li onclick="navigate('home')" id="nav-home" class="active-nav">Home</li>
+                <li onclick="navigate('products')" id="nav-products">Produk</li>
+                <li onclick="navigate('about')" id="nav-about">Tentang Kami</li>
+                <li onclick="navigate('contact')" id="nav-contact">Kontak</li>
+                <li onclick="navigate('cart')" id="nav-cart">
+                    Keranjang <span id="cart-count">0</span>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- HALAMAN: HOME -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <h1>Gaya gen z, harga berkualitas.</h1>
+                <p>Temukan koleksi pakaian modern terbaik untuk menunjang penampilanmu setiap hari.</p>
+                <button class="btn" onclick="navigate('products')">Belanja Sekarang</button>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 50px;">Produk Unggulan</h2>
+            <div class="grid-products" id="featured-products"></div>
+        </section>
+
+        <!-- HALAMAN: DAFTAR PRODUK -->
+        <section id="products" class="page">
+            <h2 class="section-title">Koleksi Kami</h2>
+            <div class="grid-products" id="all-products"></div>
+        </section>
+
+        <!-- HALAMAN: DETAIL PRODUK -->
+        <section id="detail" class="page">
+            <button class="btn btn-outline" style="margin-bottom: 20px;" onclick="navigate('products')">&larr; Kembali ke Produk</button>
+            <div class="detail-container" id="product-detail-container"></div>
+        </section>
+
+        <!-- HALAMAN: KERANJANG -->
+        <section id="cart" class="page">
+            <h2 class="section-title">Keranjang Belanja</h2>
+            <div id="cart-content"></div>
+        </section>
+
+        <!-- HALAMAN: CHECKOUT -->
+        <section id="checkout" class="page">
+            <h2 class="section-title">Checkout Pesanan</h2>
+            <div class="checkout-grid">
+                <div class="checkout-form">
+                    <h3>Data Pengiriman</h3>
+                    <br>
+                    <form id="form-checkout" onsubmit="processCheckout(event)">
+                        <div class="form-group">
+                            <label>Nama Lengkap</label>
+                            <input type="text" class="form-control" required placeholder="Masukkan nama Anda">
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor HP / WhatsApp</label>
+                            <input type="tel" class="form-control" required placeholder="Contoh: 08123456789">
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat Lengkap</label>
+                            <textarea class="form-control" rows="4" required placeholder="Nama Jalan, RT/RW, Kelurahan, Kecamatan, Kota"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Metode Pembayaran (Simulasi)</label>
+                            <select class="form-control" required>
+                                <option value="transfer">Transfer Bank (BCA / Mandiri / BNI)</option>
+                                <option value="ewallet">E-Wallet (Gopay / OVO / Dana)</option>
+                                <option value="cod">Cash on Delivery (Bayar di Tempat)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Selesaikan Pesanan</button>
+                    </form>
+                </div>
+                <div class="checkout-summary">
+                    <h3>Ringkasan Pesanan</h3>
+                    <br>
+                    <div id="checkout-summary-content"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN: TENTANG KAMI -->
+        <section id="about" class="page">
+            <h2 class="section-title">Tentang FashionVibe</h2>
+            <div class="about-text">
+                <p>FashionVibe didirikan pada tahun 2023 dengan semangat untuk membawa fashion berkualitas premium kepada semua kalangan tanpa harus menguras dompet. Kami percaya bahwa setiap orang berhak tampil percaya diri dan menawan.</p>
+                <br>
+                <h3>Visi Kami</h3>
+                <p>Menjadi brand fashion online nomor satu di Indonesia yang mengedepankan kualitas, kenyamanan, dan desain kekinian.</p>
+                <br>
+                <h3>Misi Kami</h3>
+                <p>Memberikan pelayanan terbaik, bahan produk yang berkelanjutan, serta pengalaman belanja online yang mudah dan aman.</p>
+            </div>
+
+            <h3 class="section-title">Tim Kami (Kelompok)</h3>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://lh3.googleusercontent.com/d/1rf1t0FYc-x2q11_ufF98hOBjiadZJhuZ" alt="Syafira">
+                    <h4>Syafira</h4>
+                    <p>Frontend Developer</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://lh3.googleusercontent.com/d/1sXmYfxAFZEYi8pEaGOA6FaOYfSQ_fCKO" alt="Tri Ayu">
+                    <h4>Tri Ayu</h4>
+                    <p>logic Handler</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://lh3.googleusercontent.com/d/1ojLp_h0txZm8cQuzr9uYdm3v-a3FLjI5" alt="Annisa">
+                    <h4>Annisa</h4>
+                    <p>Content</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://lh3.googleusercontent.com/d/1rvHRaq_EGMY6FYR317iW-g2gMs_fP7Qv" alt="Wulan">
+                    <h4>Wulan</h4>
+                    <p>international business</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://lh3.googleusercontent.com/d/1rwou3HtOugNH_NgxIwTJxtrK8cCIszuA" alt="Adefitri">
+                    <h4>Adefitri</h4>
+                    <p>UI/UX Designer</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://lh3.googleusercontent.com/d/1KO4E1v8ytC1QvHGjkcNYgC01C5M0DQKp" alt="Naysila">
+                    <h4>Naysila</h4>
+                    <p>product Manager</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://lh3.googleusercontent.com/d/1599SaBvqeuD3HqJWK9873u33EZuoLC8A" alt="Eriyana">
+                    <h4>Eriyana</h4>
+                    <p>Backend</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- HALAMAN: KONTAK -->
+        <section id="contact" class="page">
+            <h2 class="section-title">Hubungi Kami</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Informasi Kontak</h3>
+                    <br>
+                    <p>📞 <strong>WhatsApp:</strong> <br>0812-3456-7890 (rara)</p>
+                    <p>✉️ <strong>Email:</strong> <br>syafiramanjani94@gmail.com</p>
+                    <p>📍 <strong>Alamat Kantor:</strong> <br>Jl. perintis kemerdekaan, Jakarta Utara, 14240</p>
+                    <br>
+                    <p><strong>Jam Operasional:</strong><br>Senin - Jumat: 09.00 - 17.00 WIB</p>
+                </div>
+                <div class="contact-form">
+                    <h3>Kirim Pesan</h3>
+                    <br>
+                    <form id="form-contact" onsubmit="submitContact(event)">
+                        <div class="form-group">
+                            <label>Nama Anda</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Anda</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Pesan</label>
+                            <textarea class="form-control" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Kirim Pesan</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 FashionVibe. Dibuat untuk simulasi toko online.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data Produk
+        const products = [
+            { id: 1, name: "Jaket Denim Klasik", price: 250000, stock: 15, img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80", desc: "Jaket denim dengan potongan klasik, cocok untuk gaya kasual sehari-hari." },
+            { id: 2, name: "Kaos Oversize Hitam", price: 120000, stock: 30, img: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=600&q=80", desc: "Kaos polos gaya oversize berbahan katun bambu 100%." },
+            { id: 3, name: "Dress Floral Musim Panas", price: 185000, stock: 10, img: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=600&q=80", desc: "Dress motif bunga yang cantik untuk liburan santai." },
+            { id: 4, name: "Kemeja Flanel Kotak", price: 165000, stock: 20, img: "https://images.unsplash.com/photo-1598032895397-b9472444bf93?auto=format&fit=crop&w=600&q=80", desc: "Kemeja flanel unisex dengan perpaduan warna yang elegan." },
+            { id: 5, name: "Sneakers Putih Minimalis", price: 320000, stock: 25, img: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=600&q=80", desc: "Sepatu sneakers putih yang mudah dibersihkan dan nyaman." },
+            { id: 6, name: "Tas Selempang Kulit", price: 210000, stock: 12, img: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=600&q=80", desc: "Tas selempang elegan berbahan kulit sintetis premium." }
+        ];
+
+        let cart = [];
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+        }
+
+        function navigate(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.nav-links li').forEach(link => link.classList.remove('active-nav'));
+            document.getElementById(pageId).classList.add('active');
+            const activeNav = document.getElementById('nav-' + pageId);
+            if(activeNav) activeNav.classList.add('active-nav');
+            window.scrollTo(0, 0);
+            if(pageId === 'cart') renderCart();
+            else if (pageId === 'checkout') renderCheckoutSummary();
+        }
+
+        function renderProducts() {
+            const featuredContainer = document.getElementById('featured-products');
+            const allContainer = document.getElementById('all-products');
+            
+            let homeHTML = '';
+            products.slice(0, 3).forEach(p => {
+                homeHTML += `<div class="product-card">
+                    <img src="${p.img}" alt="${p.name}" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">${p.name}</h3>
+                        <div class="product-price">${formatRupiah(p.price)}</div>
+                        <button class="btn" onclick="viewDetail(${p.id})">Lihat Detail</button>
+                    </div>
+                </div>`;
+            });
+            featuredContainer.innerHTML = homeHTML;
+
+            let allHTML = '';
+            products.forEach(p => {
+                allHTML += `<div class="product-card">
+                    <img src="${p.img}" alt="${p.name}" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">${p.name}</h3>
+                        <div class="product-price">${formatRupiah(p.price)}</div>
+                        <button class="btn" onclick="viewDetail(${p.id})">Lihat Detail</button>
+                    </div>
+                </div>`;
+            });
+            allContainer.innerHTML = allHTML;
+        }
+
+        function viewDetail(id) {
+            const product = products.find(p => p.id === id);
+            if(!product) return;
+            document.getElementById('product-detail-container').innerHTML = `
+                <div class="detail-img"><img src="${product.img}" alt="${product.name}"></div>
+                <div class="detail-info">
+                    <h2>${product.name}</h2>
+                    <div class="detail-price">${formatRupiah(product.price)}</div>
+                    <div class="detail-stock">Sisa Stok: ${product.stock}</div>
+                    <p class="detail-desc">${product.desc}</p>
+                    <div style="display:flex; align-items:center; margin-top: 30px;">
+                        <input type="number" id="qty-input" class="qty-input" value="1" min="1" max="${product.stock}">
+                        <button class="btn" onclick="addToCart(${product.id})">Tambah ke Keranjang</button>
+                    </div>
+                </div>`;
+            navigate('detail');
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const qtyInput = document.getElementById('qty-input');
+            const qty = parseInt(qtyInput ? qtyInput.value : 1);
+            if(qty > product.stock) {
+                showToast('Jumlah melebihi stok!', 'error');
+                return;
+            }
+            const existingItem = cart.find(item => item.product.id === productId);
+            if(existingItem) existingItem.qty += qty;
+            else cart.push({ product: product, qty: qty });
+            updateCartBadge();
+            showToast(`${product.name} ditambahkan!`, 'success');
+        }
+
+        function updateCartBadge() {
+            document.getElementById('cart-count').innerText = cart.reduce((total, item) => total + item.qty, 0);
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-content');
+            if(cart.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding: 50px 0;"><p>Keranjang kosong.</p><button class="btn" onclick="navigate('products')">Belanja</button></div>`;
+                return;
+            }
+            let grandTotal = 0;
+            let html = `<table class="cart-table"><thead><tr><th>Produk</th><th>Harga</th><th>Jumlah</th><th>Subtotal</th><th>Aksi</th></tr></thead><tbody>`;
+            cart.forEach((item, index) => {
+                const subtotal = item.product.price * item.qty;
+                grandTotal += subtotal;
+                html += `<tr><td><img src="${item.product.img}" class="cart-item-img">${item.product.name}</td><td>${formatRupiah(item.product.price)}</td><td>${item.qty}</td><td>${formatRupiah(subtotal)}</td><td><button class="btn btn-remove" onclick="removeFromCart(${index})">Hapus</button></td></tr>`;
+            });
+            html += `</tbody></table><div class="cart-total-container">Total: ${formatRupiah(grandTotal)}<br><br><button class="btn" onclick="navigate('checkout')">Checkout &rarr;</button></div>`;
+            container.innerHTML = html;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartBadge();
+            renderCart();
+        }
+
+        function renderCheckoutSummary() {
+            const container = document.getElementById('checkout-summary-content');
+            if(cart.length === 0) { container.innerHTML = `<p>Kosong.</p>`; return; }
+            let total = 0;
+            let html = `<ul style="margin-bottom: 20px;">`;
+            cart.forEach(item => {
+                const sub = item.product.price * item.qty;
+                total += sub;
+                html += `<li style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>${item.product.name} (x${item.qty})</span><strong>${formatRupiah(sub)}</strong></li>`;
+            });
+            html += `</ul><div style="display: flex; justify-content: space-between; font-weight: bold;"><span>Total:</span><span>${formatRupiah(total)}</span></div>`;
+            container.innerHTML = html;
+        }
+
+        function processCheckout(event) {
+            event.preventDefault();
+            if(cart.length === 0) { showToast("Kosong!", 'error'); return; }
+            showToast("Pesanan berhasil diproses!", 'success');
+            cart = [];
+            updateCartBadge();
+            document.getElementById('form-checkout').reset();
+            setTimeout(() => navigate('home'), 1500);
+        }
+
+        function submitContact(event) {
+            event.preventDefault();
+            showToast('Pesan terkirim!', 'success');
+            document.getElementById('form-contact').reset();
+        }
+
+        window.onload = renderProducts;
+    </script>
+</body>
+</html>
